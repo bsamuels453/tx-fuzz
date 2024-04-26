@@ -9,7 +9,6 @@ import (
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -162,12 +161,15 @@ func Airdrop(config *Config, value *big.Int) error {
 			return err
 		}
 		to := crypto.PubkeyToAddress(addr.PublicKey)
+		//bal, e := backend.BalanceAt(context.Background(), crypto.PubkeyToAddress(config.faucet.PublicKey), nil)
+		//_ = bal
+		//_ = e
 		gp, _ := backend.SuggestGasPrice(context.Background())
 		gas, err := backend.EstimateGas(context.Background(), ethereum.CallMsg{
 			From:     crypto.PubkeyToAddress(config.faucet.PublicKey),
 			To:       &to,
-			Gas:      math.MaxInt64,
-			GasPrice: gp,
+			Gas:      100000,
+			GasPrice: gp.Mul(big.NewInt(1), gp),
 			Value:    value,
 			Data:     nil,
 		})

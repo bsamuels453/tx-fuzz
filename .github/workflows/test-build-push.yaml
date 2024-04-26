@@ -62,7 +62,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ethpandaops/tx-fuzz
+          images: bensamstob/tx-fuzz
           flavor: latest=true
           tags: |
             type=ref,event=branch
