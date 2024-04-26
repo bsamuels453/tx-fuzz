@@ -165,6 +165,10 @@ func Airdrop(config *Config, value *big.Int) error {
 		//_ = bal
 		//_ = e
 		gp, _ := backend.SuggestGasPrice(context.Background())
+		// floor for gas price to avoid avax bug
+		if gp.Cmp(big.NewInt(225000000000)) != 1 {
+			gp = big.NewInt(225000000000)
+		}
 		gas, err := backend.EstimateGas(context.Background(), ethereum.CallMsg{
 			From:     crypto.PubkeyToAddress(config.faucet.PublicKey),
 			To:       &to,
